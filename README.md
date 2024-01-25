@@ -3,7 +3,7 @@ Extremely simple tool to convert time to swatch. It was a fun exercise to play w
 
 ## Usage
 ```
-swatch - converts time to swatch
+swatch - converts time to swatch internet time
 usage: swatch [time]
 Time parameter can be emitted for current time. It can be formatted as:
     - "YYYY-MM-DD hh:mm:ss"

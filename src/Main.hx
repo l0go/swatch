@@ -5,21 +5,23 @@ class Main {
 
 	static function main() {
 		final args = Sys.args();
-
-		var date: Date = Date.now();
-		if (args.length >= 1) {
+		
+		try {
 			if (args[1].toLowerCase() == "--help") {
 				help();
 				return;
 			}
+		} catch (_) {}
 
+		var date: Date = Date.now();
+		if (args.length >= 1) {
 			try {
 				date = Date.fromString(args[1]);
 			} catch (_) {
 				Sys.println('swatch: unrecognized argument');
 				help();
 			}
-		};
+		}
 
 		// Display
 		if (date != null) {
