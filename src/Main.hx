@@ -5,39 +5,44 @@ class Main {
 
 	static function main() {
 		final args = Sys.args();
+		final lastArg = args[args.length - 1] ?? "";
 		
-		try {
-			if (args[1].toLowerCase() == "--help") {
+		var date: Date = Date.now();
+		var splitter = ~/[:\s-]/g;
+
+		switch (splitter.split(lastArg)) {
+			case [""]: // skip if blank
+			// For YYYY-MM-DD, hh:mm:ss, and YYYY-MM-DD hh:mm:ss
+			case [_, _, _, _] | [_, _, _]:
+				try {
+					date = Date.fromString(lastArg);
+				} catch (_) {
+					Sys.stderr().writeString("swatch: unrecognized date string\n");
+					help();
+					return;
+				}
+			case ["--help"]:
 				help();
 				return;
-			}
-		} catch (_) {}
-
-		var date: Date = Date.now();
-		if (args.length >= 1) {
-			try {
-				date = Date.fromString(args[1]);
-			} catch (_) {
-				Sys.println('swatch: unrecognized argument');
+			default:
+				Sys.stderr().writeString("swatch: unrecognized argument\n");
 				help();
-			}
+				return;
 		}
 
 		// Display
-		if (date != null) {
-			Sys.println(getSwatch(date));
-		}
+		Sys.println(getSwatch(date));
 	}
 
-	static function help(): Void {
+	static function help() {
 		var buf = new StringBuf();
 		buf.add("swatch - converts time to swatch internet time\n");
 		buf.add("usage: swatch [time]\n");
 		buf.add("Time parameter can be emitted for current time. It can be formatted as:\n");
 		buf.add("	- \"YYYY-MM-DD hh:mm:ss\"\n");
 		buf.add("	- \"YYYY-MM-DD\"\n");
-		buf.add("	- \"hh:mm:ss\"");
-		Sys.println(buf.toString());
+		buf.add("	- \"hh:mm:ss\"\n");
+		Sys.stderr().writeString(buf.toString());
 	}
 
 	/**
